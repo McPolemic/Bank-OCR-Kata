@@ -1,0 +1,26 @@
+# User Story 1 - Parsing
+* Slurp and split one double newlines to start parsing files with multiple account numbers
+
+# User Story 2 - Checksumming
+* Refactor the parsed account number to be a vector of integers (makes checksumming easier)
+* Implement the checksumming (I believe reversing the account number and using the index + 1 will do it)
+  * Reverse the account number
+  * Index + 1 * account number
+  * reduce +
+  * modulo 11
+  * == 0
+
+# User Story 3 - Validate Account Numbers
+* Oops. Didn't read ahead. Replace invalid characters with "?"
+* Return ILL if "?" in account number
+* Return ERR if checksum
+
+# User Story 4 - Error Correction
+* Make a sequence for all combinations with
+  * One "|" or "_" replaced by a space
+* Filter on valid checksums
+* Return account number(s)
+  * case 0 valid? - ILL
+  *      1 valid? - the new account number
+  *      2+ valid? - AMB
+
