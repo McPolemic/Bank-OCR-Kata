@@ -1,60 +1,59 @@
 (ns bank-ocr-kata.parser
   (:require [clojure.string :as str]))
 
-(defn one-line [& lines]
-  "Convert a vector to a newline-separated string so we can line up numbers in
-   the source code"
-  (str/join "\n" lines))
+(defn lines->matrix [& lines]
+  "Convert a vector of lines to a 3x3 matrix of characters"
+  (map seq lines))
 
 (def zero
-   (one-line " _ "
-             "| |"
-             "|_|"))
+   (lines->matrix " _ "
+                  "| |"
+                  "|_|"))
 
 (def one
-   (one-line "   "
-             "  |"
-             "  |"))
+   (lines->matrix "   "
+                  "  |"
+                  "  |"))
 
 (def two
-   (one-line " _ "
-             " _|"
-             "|_ "))
+   (lines->matrix " _ "
+                  " _|"
+                  "|_ "))
 
 (def three
-   (one-line " _ "
-             " _|"
-             " _|"))
+   (lines->matrix " _ "
+                  " _|"
+                  " _|"))
 
 (def four
-   (one-line "   "
-             "|_|"
-             "  |"))
+   (lines->matrix "   "
+                  "|_|"
+                  "  |"))
 
 (def five
-   (one-line " _ "
-             "|_ "
-             " _|"))
+   (lines->matrix " _ "
+                  "|_ "
+                  " _|"))
 
 (def six
-   (one-line " _ "
-             "|_ "
-             "|_|"))
+   (lines->matrix " _ "
+                  "|_ "
+                  "|_|"))
 
 (def seven
-   (one-line " _ "
-             "  |"
-             "  |"))
+   (lines->matrix " _ "
+                  "  |"
+                  "  |"))
 
 (def eight
-   (one-line " _ "
-             "|_|"
-             "|_|"))
+   (lines->matrix " _ "
+                  "|_|"
+                  "|_|"))
 
 (def nine
-   (one-line " _ "
-             "|_|"
-             " _|"))
+   (lines->matrix " _ "
+                  "|_|"
+                  " _|"))
 
 (def digits
   { zero "0", one "1", two "2", three "3", four "4", five "5", six "6", seven "7", eight "8", nine "9" })
@@ -65,17 +64,13 @@
 
 (defn matrix->digit-string [matrix]
   "Takes a 3x3 matrix of characters and returns a string for digit lookup"
-  (apply one-line (map #(apply str %) matrix)))
+  (apply lines->matrix (map #(apply str %) matrix)))
 
-(defn parse-account-numbers [input]
+(defn parse-account-number [input]
   "Splits an account number into digits, then parses individually"
   (let [lines (str/split-lines input)]
-    ; String them together
     (apply str
-           ; Get a list of parsed numbers
            (map parse-single-number
-                (map matrix->digit-string
-                     ; Split each line into a list of three characters, then map through the groups
-                     ; and make a 3x3 matrix of characters for a single digit
-                     (apply map list (map (partial partition 3) lines)))))))
-
+                ; Split each line into a list of three characters, then map through the groups
+                ; and make a 3x3 matrix of characters for a single digit
+                (apply map list (map (partial partition 3) lines))))))

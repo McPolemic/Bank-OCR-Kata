@@ -1,11 +1,12 @@
 (ns bank-ocr-kata.parser-test
   (:require [clojure.test :refer :all]
+            [clojure.string :as str]
             [bank-ocr-kata.parser :refer :all]))
 
 (def invalid-digit
-   (one-line "/o/"
-             " / "
-             "/ /"))
+   (lines->matrix "/o/"
+                  " / "
+                  "/ /"))
 
 (deftest test-parse-single-number
   (testing "parses a single account digit"
@@ -30,11 +31,11 @@
   (testing "converts from matrix of characters to digit"
     (is (= two (matrix->digit-string two-matrix)))))
 
-(def single-account-number (one-line "    _  _     _  _  _  _  _ "
-                                     "  | _| _||_||_ |_   ||_||_|"
-                                     "  ||_  _|  | _||_|  ||_| _|"))
+(def single-account-number (str/join "\n" ["    _  _     _  _  _  _  _ "
+                                           "  | _| _||_||_ |_   ||_||_|"
+                                           "  ||_  _|  | _||_|  ||_| _|"]))
 
 (deftest test-parsing-account-numbers
   (testing "Parses a single account number"
-    (is (= "123456789" (parse-account-numbers single-account-number)))))
+    (is (= "123456789" (parse-account-number single-account-number)))))
 
