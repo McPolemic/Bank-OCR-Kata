@@ -4,7 +4,7 @@
 (defn one-line [& lines]
   "Convert a vector to a newline-separated string so we can line up numbers in
    the source code"
-  (clojure.string/join "\n" lines))
+  (str/join "\n" lines))
 
 (def zero
    (one-line " _ "
@@ -62,4 +62,20 @@
 (defn parse-single-number [input-string]
   "Takes a 4 line by 3 character string and parses to a number"
   (get digits input-string "X"))
+
+(defn matrix->digit-string [matrix]
+  "Takes a 3x3 matrix of characters and returns a string for digit lookup"
+  (apply one-line (map #(apply str %) matrix)))
+
+(defn parse-account-numbers [input]
+  "Splits an account number into digits, then parses individually"
+  (let [lines (str/split-lines input)]
+    ; String them together
+    (apply str
+           ; Get a list of parsed numbers
+           (map parse-single-number
+                (map matrix->digit-string
+                     ; Split each line into a list of three characters, then map through the groups
+                     ; and make a 3x3 matrix of characters for a single digit
+                     (apply map list (map (partial partition 3) lines)))))))
 
